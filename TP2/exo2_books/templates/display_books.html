@@ -1,0 +1,33 @@
+{%extends "base.html" %}
+
+{% from "macro.html" import display %}
+
+{% block content %}
+
+<div class ="container mt-4">
+<div class="row" style="border: 2px solid greenyellow; display: flex; justify-content: center;align-items: center;text-align: center; ">   
+    <h2> You will find below the list of alls books aviables in our Library.</h2>
+</div>
+
+<div class="row">
+    <table class=" table table-sm table-striped mt-3">
+        <thead>
+            <tr>
+                <th scope ="col">#</th>
+                <th scope ="col">ISBN</th>
+                <th scope ="col"> Title </th>
+                <th scope ="col"> Delete</th>
+
+            </tr>
+        </thead>
+
+        <tbody>  
+                {% for book in books%}
+                    {{ display( '#' ,book)}}
+                {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+{% endblock%}
