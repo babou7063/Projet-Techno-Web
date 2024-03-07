@@ -10,6 +10,16 @@ import app.services.books as service
 router = APIRouter(prefix="/books", tags=["Books"])
 templates = Jinja2Templates(directory="templates")
 
+
+@router.get('')
+def display_home_page(request: Request):
+
+    return templates.TemplateResponse(
+        "home_page.html",
+        context={'request': request}
+    )
+
+
 @router.get('/all_books')
 def get_all_books(request:Request):
     """

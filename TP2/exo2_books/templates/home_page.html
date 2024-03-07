@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 90vh;
+    }
+</style>
+<div class="container center-content">
+    <h1>Welcome in our library</h1>
+    <a>Choose an action</a>
+    <div class="d-flex mt-4">
+        <a class="btn btn-outline-success mx-4" href="/books/all_books">List of books</a>
+        <a class="btn btn-outline-success mx-4" href="/books/modify">Book creation</a>
+    </div>
+</div>
+{% endblock %}
