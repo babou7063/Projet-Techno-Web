@@ -4,7 +4,7 @@ from app.routes.books import router as book_router
 
 app = FastAPI(title="Books")
 app.include_router(book_router)
-#app.mount("/static", StaticFiles(directory="static"))
+#app.mount("/static", StaticFiles(directory="app/static"))
 
 @app.on_event('startup')
 def on_startup():
