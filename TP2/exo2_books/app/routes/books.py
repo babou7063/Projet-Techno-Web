@@ -7,11 +7,11 @@ from fastapi.responses import RedirectResponse
 from app.schemas.book import Book
 import app.services.books as service
 
-router = APIRouter(prefix="/books", tags=["Books"])
+router = APIRouter(tags=["Books"])
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get('')
+@router.get('/')
 def display_home_page(request: Request):
 
     return templates.TemplateResponse(
@@ -186,4 +186,4 @@ def delete_book(ISBN: str,request:Request):
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="No book found with this ISBN.",
             )
-        return RedirectResponse(url="/books/all_books", status_code=302)
+        return RedirectResponse(url="/all_books", status_code=302)
