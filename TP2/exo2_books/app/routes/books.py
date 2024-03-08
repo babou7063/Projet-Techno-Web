@@ -72,7 +72,7 @@ def get_book(ISBN: str):
     return JSONResponse(book.model_dump())
 
 
-@router.post('/')
+@router.post('/create_book/')
 def create_new_book(ISBN: str, title: str):
     """
     Create a new book entry.
@@ -112,7 +112,17 @@ def create_new_book(ISBN: str, title: str):
     return JSONResponse(new_book.model_dump())
 
 
-@router.post('/{ISBN}')
+@router.get('/modify/{ISBN}')
+def ask_to_modify(ISBN: str, request: Request):
+    book = service.get_book_by_id(ISBN)
+    
+    return templates.TemplateResponse(
+        "modify_book.html",
+        context={'request': request, 'book': book}
+    )
+
+
+@router.post('/modify/{ISBN}')
 def modify_book(ISBN: str, title: str):
     """
     Modify an existing book entry.
@@ -154,7 +164,7 @@ def modify_book(ISBN: str, title: str):
             detail="No book found with this ISBN.",
         )
 
-    return JSONResponse(updated_book)
+    return RedirectResponse(url="/all_books", status_code=302)
 
 
 
