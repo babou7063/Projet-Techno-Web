@@ -17,7 +17,7 @@ def save_book(new_book: Book) -> Book:
         The saved book object.
 
     """
-    database["books"].append(new_book)
+    database["books"].append(new_book.model_dump())
     return new_book
 
 
@@ -52,6 +52,7 @@ def get_book_by_id(ISBN: str) -> Book | None:
 
     """
 
+    print(database)
     selected_book = [
         book for book in database["books"]
         if book["ISBN"] == ISBN
@@ -76,12 +77,12 @@ def delete_book_by_id(ISBN: str) -> dict | None:
         The deleted book object or None if not found.
 
     """
-    selected_book = get_book_by_id(ISBN)
-    for book in database["books"]:
+    deleted_book = None
+    for idx, book in enumerate(database["books"]):
         if book["ISBN"] == ISBN:
-            database["books"].remove(book)
-
-    return selected_book
+            deleted_book = Book.model_validate(book)
+            database["books"].pop(idx)
+    return deleted_book
     
 def update_book(new_book: Book) -> Book | None:
     """

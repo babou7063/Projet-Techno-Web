@@ -14,9 +14,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <script>
-    function confirmAndDelete() {
+    function confirmAndDelete(clickedElement) {
         if (confirm("Are you sure you want to delete this book?")) {
-            document.getElementById("deleteForm").submit();
+            clickedElement.parentElement.submit();
         }
     }
 </script>
