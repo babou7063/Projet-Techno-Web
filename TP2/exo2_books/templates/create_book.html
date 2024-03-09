@@ -1,0 +1,20 @@
+{%extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="m-3">Create a new book</h1>
+    <form action="/create_book" method="post">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="isbn" name="ISBN" placeholder="ISBN">
+        <label for="isbn" class="form-label">ISBN</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+        <label for="title" class="form-label">Title</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+
+{% endblock %}

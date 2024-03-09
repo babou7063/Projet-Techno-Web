@@ -1,9 +1,10 @@
+import logging
+from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, status,Request
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, Form, HTTPException, status, Request
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import ValidationError
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse
 from app.schemas.book import Book
 import app.services.books as service
 
@@ -42,7 +43,7 @@ def get_all_books(request:Request):
         context={'request': request, 'books': books}
     )
 
-@router.get('/{ISBN}')
+@router.get('/book/{ISBN}')
 def get_book(ISBN: str):
     """
     Retrieve information about a specific book based on its ISBN.
@@ -72,8 +73,8 @@ def get_book(ISBN: str):
     return JSONResponse(book.model_dump())
 
 
-@router.post('/create_book/')
-def create_new_book(ISBN: str, title: str):
+@router.post('/create_book/', response_class=RedirectResponse, status_code=status.HTTP_303_SEE_OTHER)
+def create_new_book(ISBN: Annotated[str, Form()], title: Annotated[str, Form()]):
     """
     Create a new book entry.
 
@@ -86,8 +87,7 @@ def create_new_book(ISBN: str, title: str):
 
     Returns
     -------
-    JSONResponse
-        A JSON response containing information about the newly created book.
+    Redirect the user to the list books pages
 
     Raises
     ------
@@ -95,11 +95,9 @@ def create_new_book(ISBN: str, title: str):
         If the provided ISBN or title is invalid.
 
     """
-
     new_book_data = {
         "ISBN": ISBN,
         "title": title,
-        
     }
     try:
         new_book = Book.model_validate(new_book_data)
@@ -109,7 +107,14 @@ def create_new_book(ISBN: str, title: str):
             detail="Invalid ISBN or title is not valid.",
         )
     service.save_book(new_book)
-    return JSONResponse(new_book.model_dump())
+    return RedirectResponse("/all_books", status_code=status.HTTP_303_SEE_OTHER)
+
+@router.get('/creation/')
+def creation_page(request: Request):
+    return templates.TemplateResponse(
+        "create_book.html",
+        context={'request': request},
+    )
 
 
 @router.get('/modify/{ISBN}')
