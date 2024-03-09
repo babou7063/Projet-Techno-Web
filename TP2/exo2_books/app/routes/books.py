@@ -1,11 +1,12 @@
 
-from fastapi import APIRouter, HTTPException, status,Request
+from fastapi import APIRouter, HTTPException, status, Request, Form
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from app.schemas.book import Book
 import app.services.books as service
+from typing import Annotated
 
 router = APIRouter(tags=["Books"])
 templates = Jinja2Templates(directory="templates")
@@ -123,7 +124,7 @@ def ask_to_modify(ISBN: str, request: Request):
 
 
 @router.post('/modify/{ISBN}')
-def modify_book(ISBN: str, title: str):
+def modify_book(ISBN: str, title: Annotated[str, Form()]):
     """
     Modify an existing book entry.
 
