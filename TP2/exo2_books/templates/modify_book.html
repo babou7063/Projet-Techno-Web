@@ -1,7 +1,32 @@
 {%extends "base.html" %}
 
 {% block content %}
+<style>
+    .center-content {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+    }
+    
+</style>
 
-<h1>MODIFICATION</h1>
+<div class="container center-content">
+    
+    <h1>Edit your book</h1>
+
+    <form action="/modify/{{ book.ISBN }} " method="post">
+        
+        <div class="form-group">
+            <label for="book_title">New title</label>
+            <input type="text" class="form-control" id="book_title"
+                name="title"/>
+        </div>
+        
+        <button type="submit" class="btn btn-success my-4">Apply modifications</button>
+        <a class="btn btn-outline-dark mx-2" href="/all_books">Back</a>
+        
+    </form>
+        
+</div>
 
 {% endblock %}
