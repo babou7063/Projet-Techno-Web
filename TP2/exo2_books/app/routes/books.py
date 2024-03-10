@@ -12,10 +12,8 @@ from typing import Annotated
 router = APIRouter(tags=["Books"])
 templates = Jinja2Templates(directory="templates")
 
-
 @router.get('/')
 def display_home_page(request: Request):
-
     return templates.TemplateResponse(
         "home_page.html",
         context={'request': request}
@@ -97,17 +95,23 @@ def create_new_book(ISBN: Annotated[str, Form()], title: Annotated[str, Form()])
 
     """
     new_book_data = {
-        "ISBN": ISBN,
-        "title": title,
+        "ISBN": ISBN.strip(),
+        "title": title.strip(),
     }
     try:
         new_book = Book.model_validate(new_book_data)
     except ValidationError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid ISBN or title is not valid.",
+            detail="Invalid ISBN or title.",
         )
-    service.save_book(new_book)
+    try:
+        service.save_book(new_book)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="A book with this ISBN already exists.",
+        )
     return RedirectResponse("/all_books", status_code=status.HTTP_303_SEE_OTHER)
 
 @router.get('/creation/')
@@ -196,7 +200,6 @@ def delete_book(ISBN: str,request:Request):
     """
     if request.method == 'POST':
         book = service.delete_book_by_id(ISBN)
-        print(book)
         if book is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

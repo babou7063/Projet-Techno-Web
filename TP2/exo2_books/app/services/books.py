@@ -16,8 +16,14 @@ def save_book(new_book: Book) -> Book:
     new_book : Book
         The saved book object.
 
+    Raises
+    ------
+    ValueError
+        If the book already exists
     """
-    database["books"].append(new_book.model_dump())
+    if new_book.ISBN in database["books"]:
+        raise ValueError(f"Book {new_book.ISBN} already exists")
+    database["books"][new_book.ISBN] = new_book.model_dump()
     return new_book
 
 
@@ -32,7 +38,7 @@ def get_all_books() -> list[Book]:
 
     """
     books_data = database["books"]
-    books = [Book.model_validate(data) for data in books_data]
+    books = [Book.model_validate(book) for book in books_data.values()]
     return books
 
 
@@ -52,17 +58,14 @@ def get_book_by_id(ISBN: str) -> Book | None:
 
     """
 
-    print(database)
-    selected_book = [
-        book for book in database["books"]
-        if book["ISBN"] == ISBN
-    ]
-    if len(selected_book) < 1:
+    try:
+        selected_book = database["books"][ISBN]
+    except KeyError:
         return None
-    selected_book = Book.model_validate(selected_book[0])
+    selected_book = Book.model_validate(selected_book)
     return selected_book
     
-def delete_book_by_id(ISBN: str) -> dict | None:
+def delete_book_by_id(ISBN: str) -> Book | None:
     """
     Delete a book from the database based on its ISBN.
 
@@ -77,11 +80,11 @@ def delete_book_by_id(ISBN: str) -> dict | None:
         The deleted book object or None if not found.
 
     """
-    deleted_book = None
-    for idx, book in enumerate(database["books"]):
-        if book["ISBN"] == ISBN:
-            deleted_book = Book.model_validate(book)
-            database["books"].pop(idx)
+    try:
+        deleted_book = database["books"].pop(ISBN)
+    except KeyError:
+        return None
+    deleted_book = Book.model_validate(deleted_book)
     return deleted_book
     
 def update_book(new_book: Book) -> Book | None:
@@ -103,9 +106,5 @@ def update_book(new_book: Book) -> Book | None:
     
     if modify_book is None:
         return modify_book
-    
-    else :
-        for book in database['books']:
-            if book["ISBN"] == new_book.ISBN:
-                book["title"] = new_book.title
-                return book
+    database["books"][new_book.ISBN]["title"] = new_book.title
+    return new_book
