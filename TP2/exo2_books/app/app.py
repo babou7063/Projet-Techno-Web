@@ -2,12 +2,12 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.exceptions import RequestValidationError
-#from fastapi.staticfiles import StaticFiles
+from fastapi.staticfiles import StaticFiles
 from app.routes.books import router as book_router
 
 app = FastAPI(title="Books")
 app.include_router(book_router)
-#app.mount("/static", StaticFiles(directory="app/static"))
+app.mount("/static", StaticFiles(directory="../exo2_books/static"),name='static')
 templates = Jinja2Templates(directory="templates")
 
 @app.on_event('startup')
