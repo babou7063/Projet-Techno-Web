@@ -1,0 +1,25 @@
+{%extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="m-3">Create your account</h1>
+    <form action="/create_account" method="post" class="was-validated">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="name" name="name" placeholder="name" required>
+        <label for="name" class="form-label">Name</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="password" name="password" placeholder="password" required>
+        <label for="password" class="form-label">Password</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="confirm_password" name="confirm_password" placeholder="confirm_password" required>
+        <label for="confirm_password" class="form-label">Confirm password</label>
+      </div>
+      <button type="submit" class="btn btn-success m-2">Create</button>
+      <a class="btn btn-outline-dark mx-2" href="/all_books">Back</a>
+    </form>
+</div>
+
+{% endblock %}
