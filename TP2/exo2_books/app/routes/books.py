@@ -121,6 +121,14 @@ def creation_page(request: Request):
         context={'request': request},
     )
 
+@router.get('/creation_account/')
+def creation_account(request: Request):
+    return templates.TemplateResponse(
+        "creation_account.html",
+        context={'request': request},
+    )
+
+""" méthode post creation_account encore à faire, en fct de la base de données des user """
 
 @router.get('/modify/{ISBN}')
 def ask_to_modify(ISBN: str, request: Request):
