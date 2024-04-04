@@ -7,7 +7,6 @@ from app.routes.books import router as book_router
 from app.routes.users import router as user_router
 from starlette.middleware.sessions import SessionMiddleware
 
-
 app = FastAPI(title="Books")
 app.include_router(book_router)
 app.include_router(user_router)

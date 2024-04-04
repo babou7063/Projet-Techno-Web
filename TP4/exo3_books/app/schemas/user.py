@@ -16,7 +16,9 @@ class User(BaseModel):
     password: str
         The password of the user.
     status: str
-        The status of the user (client / admin).
+        The status of the user (block / okay).
+    group:str
+        The group of the user (client / admin).
 
     Notes
     -----
@@ -28,3 +30,4 @@ class User(BaseModel):
     email: str
     password: str
     status: Optional[str] = None
+    group:Optional[str] = None

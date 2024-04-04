@@ -1,0 +1,22 @@
+{%extends "base.html" %}
+
+{% block content %}
+<div class="b">
+    <div class="login-container">
+        <form action="/login_admin" method="post">
+            <h2>Login Admin</h2>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+            <p class="signup-option">Don't have an account? <a href="/signup">Sign up</a></p>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

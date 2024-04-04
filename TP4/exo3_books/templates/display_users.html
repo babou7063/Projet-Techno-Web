@@ -1,0 +1,46 @@
+{%extends "base.html" %}
+
+{% from "macro.html" import displayU %}
+
+{% block content %}
+
+<div class ="container mt-4">
+
+    <div class="navbar">
+        <div class="container-fluid">
+            
+            <div class="navbar-header">
+                <a class="btn btn-outline-danger mx-2" href="/logout" >LogOut</a> 
+            </div>
+        </div>
+    </div>
+<div class="row"  id="list">   
+    <h2> You will find below the list of alls users aviables in our Library.</h2>
+</div>
+
+<div class="row">
+    <table class=" table table-sm table-striped mt-3">
+        <thead>
+            <tr>
+                <th scope ="col">#</th>
+                <th scope ="col">firstname</th>
+                <th scope ="col"> lastname </th>
+                <th scope ="col"> email </th>
+                <th scope ="col"> status </th>
+                <th scope ="col"> group</th>
+
+
+            </tr>
+        </thead>
+
+        <tbody>  
+                {% for user in users%}
+                    {{ displayU( '#' ,user)}}
+                {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a class="btn btn-outline-success mx-4" href="/signup/">Add a user</a>
+</div>
+
+{% endblock%}

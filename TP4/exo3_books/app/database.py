@@ -23,8 +23,26 @@ database = {
             "first_name":"ulrich",
             "last_name": "naurel",
             "email": "ulrich90@gmail.com",
-            "password": "john_password",
-            "statut" : "client"
+            "password": "passh",
+            "status" : "okay",
+            "group":"client"
+        },
+        {  "id": str(uuid4()),
+            "first_name":"nono",
+            "last_name": "pascal",
+            "email": "pascal90@gmail.com",
+            "password": "passh",
+            "status" : "blocked",
+            "group":"client"
+        },
+
+         {  "id": str(uuid4()),
+            "first_name":"admin",
+            "last_name": "admin",
+            "email": "admin@gmail.com",
+            "password": "passw",
+            "status" : "okay",
+            "group": "admin"
         },
 
     ],

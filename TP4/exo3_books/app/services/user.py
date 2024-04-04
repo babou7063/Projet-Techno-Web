@@ -25,3 +25,25 @@ def check_user(email:str,password:str):
     if user["password"] == password : return True,user
 
     else: return False,user
+
+def update_user_status(email,status):
+
+    for user in database['users']:
+        if user['email'] == email:
+            user['status'] = status
+            return user
+    return None
+ 
+def update_user_group(email,group):
+
+    for user in database['users']:
+        if user['email'] == email:
+            user['group'] = group
+            return user
+    return None
+ 
+def get_all_users():
+
+    users_data = database["users"]
+    users = [user for user in users_data]
+    return users

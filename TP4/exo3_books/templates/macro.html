@@ -17,3 +17,22 @@
 
 {% endmacro %}
 
+{% macro displayU(num,users) %}
+<tr>
+    <td>{{num}}</td>
+    <td> {{users.first_name}}</td>
+    <td> {{users.last_name}}</td>
+    <td> {{users.email}}</td>
+    <td> {{users.status}}</td>
+    <td> {{users.group}}</td>
+    <td>
+        <a class="btn btn-outline-success mx-4" href="modify_status/{{ users.email }}">Modify status</a>
+    </td>
+    <td>
+        <a class="btn btn-outline-success mx-4" href="modify_group/{{ users.email }}">Modify group</a>
+    </td>
+
+</tr>
+
+{% endmacro %}
+

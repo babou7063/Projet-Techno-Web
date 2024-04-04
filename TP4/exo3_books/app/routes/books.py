@@ -13,6 +13,8 @@ from app.login_manager import login_manager
 router = APIRouter(tags=["Books"])
 templates = Jinja2Templates(directory="templates")
 
+
+
 @router.get('/')
 def display_home_page(request: Request):
     return templates.TemplateResponse(
