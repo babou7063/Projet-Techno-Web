@@ -1,0 +1,8 @@
+fastapi
+pydantic
+uvicorn
+Jinja2
+python-multipart
+pydantic[email]
+itsdangerous
+starlette  

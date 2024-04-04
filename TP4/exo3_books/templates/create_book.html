@@ -1,0 +1,28 @@
+{%extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1 class="m-3">Create a new book</h1>
+    <form action="/create_book" method="post" class="was-validated">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="isbn" name="ISBN" placeholder="ISBN" required>
+        <label for="isbn" class="form-label">ISBN</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+        <label for="title" class="form-label">Title</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="author" name="author" placeholder="author" required>
+        <label for="isbn" class="form-label">Author</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="editor" name="editor" placeholder="editor" required>
+        <label for="title" class="form-label">Editor</label>
+      </div>
+      <button type="submit" class="btn btn-success m-2">Create</button>
+    </form>
+</div>
+
+{% endblock %}

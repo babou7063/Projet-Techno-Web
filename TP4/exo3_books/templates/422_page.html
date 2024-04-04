@@ -1,0 +1,38 @@
+{%extends "base.html" %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="text-center">
+	<h1 class="display-1 fw-bold">422</h1>
+	<p class="fs-3"> <span class="text-danger">Unprocessable Entity.</span></p>
+	<p class="lead">
+	    Invalid request. Please enter the correct inputs.
+	    {{exception.detail}}
+	</p>
+	<div class="row">
+	    <table class=" table table-sm table-striped mt-3">
+		<thead>
+		    <tr>
+			<th scope ="col">Error Type</th>
+			<th scope ="col">Field</th>
+			<th scope ="col">Details</th>
+			<th scope ="col">Your Input</th>
+		    </tr>
+		</thead>
+
+		<tbody>  
+		{% for error in exception._errors%}
+		    <tr>
+			    <td>{{error.type}}</td>
+			    <td>{{error.loc[1]}}</td>
+			    <td>{{error.msg}}</td>
+			    <td>{{error.input}}</td>
+		    </tr>
+		{% endfor %}
+		</tbody>
+	    </table>
+	</div>
+	<a href="/" class="btn btn-primary">Go Home</a>
+    </div>
+</div>
+{% endblock %}

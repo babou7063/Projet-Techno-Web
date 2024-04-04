@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Barre de navigation -->
+<div class="navbar">
+    <div class="container-fluid">
+        <!-- Liens à gauche (si nécessaire) -->
+        <div class="navbar-header">
+            
+        </div>
+
+        <!-- Liens à droite -->
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-outline-success mx-4" href="/login">Sign In</a>
+            <a class="btn btn-outline-success mx-4" href="/sign-up">Sign Up</a>
+        </div>
+    </div>
+</div>
+
+<!-- Contenu principal -->
+<div class="container center-content">
+    <h1>Welcome in our library</h1>
+    <a>Choose an action</a>
+    <div class="d-flex mt-4">
+        <a class="btn btn-outline-success mx-4" href="/all_books">List of books</a>
+        <a class="btn btn-outline-success mx-4" href="/creation">Book creation</a>
+    </div>
+</div>
+
+{% endblock %}

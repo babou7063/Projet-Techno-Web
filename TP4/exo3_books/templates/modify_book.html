@@ -1,0 +1,33 @@
+{%extends "base.html" %}
+
+{% block content %}
+
+<div class="container center-content">
+    
+    <h1>Edit your book</h1>
+
+    <form action="/modify/{{ book.ISBN }} " method="post" class="was-validated">
+        
+        <div class="form-group">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="book_title" name="title" placeholder="title" required>
+                    <label for="book_title" class="form-label">New title</label>
+                  </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="author" name="author" placeholder="author" required>
+                    <label for="author" class="form-label">New Author</label>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="editor" name="editor" placeholder="editor" required>
+                    <label for="title" class="form-label"> New Editor</label>
+                  </div>
+        </div>
+        
+        <button type="submit" class="btn btn-success my-4">Apply modifications</button>
+        <a class="btn btn-outline-dark mx-2" href="/all_books">Back</a>
+        
+    </form>
+        
+</div>
+
+{% endblock %}
