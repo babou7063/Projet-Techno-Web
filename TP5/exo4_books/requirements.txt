@@ -1,0 +1,11 @@
+fastapi
+pydantic
+uvicorn
+Jinja2
+python-multipart
+pydantic[email]
+itsdangerous
+starlette  
+sqlalchemy
+passlib[bcrypt]
+passlib

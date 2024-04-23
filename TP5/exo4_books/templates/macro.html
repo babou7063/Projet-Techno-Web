@@ -1,0 +1,44 @@
+{% macro display(num,books,owner) %}
+<tr>
+    <td class="text-center align-middle">{{num}}</td>
+    <td class="text-center align-middle"> {{books.ISBN}}</td>
+    <td class="text-center align-middle"> {{books.title}}</td>
+    <td class="text-center align-middle"> {{books.author}}</td>
+    <td class="text-center align-middle"> {{books.editor}}</td>
+    <td class="text-center align-middle"> {{owner.first_name}}</td>
+    <td class="text-center align-middle"> {{owner.last_name}}</td>
+    <td class="text-center align-middle"> {{owner.email}}</td>
+    <td class="text-center align-middle"> {{books.price}} €</td>
+    <td class="text-center align-middle"> {{books.sale}}</td>
+
+    <td class="text-center align-middle">
+        <form id="deleteForm" action="delete/{{ books.ISBN }}" method="post">
+            <button type="button" class="btn btn-outline-danger mx-2" onclick="confirmAndDelete(this)">Delete</button>
+        </form>        
+    </td>
+    <td class="text-center align-middle">
+        <a class="btn btn-outline-success mx-4" href="modify/{{ books.ISBN }}">Book modification</a>
+    </td>
+</tr>
+
+{% endmacro %}
+
+{% macro displayU(num,users) %}
+<tr>
+    <td class="text-center align-middle">{{num}}</td>
+    <td class="text-center align-middle"> {{users.first_name}}</td>
+    <td class="text-center align-middle"> {{users.last_name}}</td>
+    <td class="text-center align-middle"> {{users.email}}</td>
+    <td class="text-center align-middle"> {{users.status}}</td>
+    <td class="text-center align-middle"> {{users.group}}</td>
+    <td class="text-center align-middle">
+        <a class="btn btn-outline-success mx-4" href="modify_status/{{ users.email }}">Modify status</a>
+    </td>
+    <td class="text-center align-middle">
+        <a class="btn btn-outline-success mx-4" href="modify_group/{{ users.email }}">Modify group</a>
+    </td>
+
+</tr>
+
+{% endmacro %}
+

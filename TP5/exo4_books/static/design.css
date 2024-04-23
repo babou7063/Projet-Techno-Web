@@ -1,0 +1,21 @@
+.panel{
+    border: 2px solid greenyellow; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+}
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+}
+#list{
+    border: 2px solid greenyellow; 
+    display: flex;
+     justify-content: center;
+     align-items: center;
+     text-align: center;
+}

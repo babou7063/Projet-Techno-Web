@@ -1,0 +1,29 @@
+{%extends "base.html" %}
+
+{% block content %}
+
+<div class="container center-content">
+    
+    <h1>Edit your User</h1>
+
+    <form action="/modify_group/{{ user.email }} " method="post" class="was-validated">
+        
+        <div class="form-group">
+            <div class="form-floating mb-3">
+                <select class="form-control" id="group" name="group" required>
+                    <option value="admin">Admin</option>
+                    <option value="client">Client</option>
+                </select>
+                <label for="group" class="form-label">Select the New Group</label>
+            </div>
+        </div>
+        
+        
+        <button type="submit" class="btn btn-success my-4">Apply modifications</button>
+        <a class="btn btn-outline-dark mx-2" href="/admin">Back</a>
+        
+    </form>
+        
+</div>
+
+{% endblock %}

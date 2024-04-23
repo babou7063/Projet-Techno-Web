@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+  <div class="navbar">
+    <div class="container-fluid">
+        
+        <div class="navbar-header">
+            <a class="btn btn-outline-danger mx-2" href="/logout" >LogOut</a> 
+        </div>
+        <div class="navbar-header">
+            <a class="btn btn-outline-success mx-2" href="/" >Go Home</a> 
+        </div>
+    </div>
+</div>
+    <h1 class="m-3">Create a new book</h1>
+    <form action="/create_book" method="post" class="was-validated">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="isbn" name="ISBN" placeholder="ISBN" required>
+        <label for="isbn" class="form-label">ISBN</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="title" name="title" placeholder="Title" required>
+        <label for="title" class="form-label">Title</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="author" name="author" placeholder="Author" required>
+        <label for="author" class="form-label">Author</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="editor" name="editor" placeholder="Editor" required>
+        <label for="editor" class="form-label">Editor</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="price" name="price" placeholder="Price" required min="0" step="0.0001">
+        <label for="price" class="form-label">Price</label>
+      </div>
+      <button type="submit" class="btn btn-success m-2">Create</button>
+    </form>
+</div>
+
+{% endblock %}

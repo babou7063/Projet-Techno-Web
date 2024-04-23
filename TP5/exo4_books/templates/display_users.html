@@ -1,0 +1,52 @@
+{%extends "base.html" %}
+
+{% from "macro.html" import displayU %}
+
+{% block content %}
+
+<div class ="container mt-4">
+
+    <div class="navbar">
+        <div class="container-fluid">
+            
+            <div class="navbar-header">
+                <a class="btn btn-outline-danger mx-2" href="/logout" >LogOut</a> 
+            </div>
+            <div class="navbar-header">
+                <a class="btn btn-outline-success mx-2" href="/" >Go Home</a> 
+            </div>
+        </div>
+    </div>
+<div class="row"  id="list">   
+    <h2> You will find below the list of alls users aviables in our Library.</h2>
+</div>
+
+<div class="row">
+    <table class=" table table-sm table-striped mt-3">
+        <thead>
+            <tr>
+                <th class="text-center align-middle" scope ="col">#</th>
+                <th class="text-center align-middle" scope ="col">firstname</th>
+                <th class="text-center align-middle" scope ="col"> lastname </th>
+                <th class="text-center align-middle" scope ="col"> email </th>
+                <th class="text-center align-middle" scope ="col"> status </th>
+                <th class="text-center align-middle" scope ="col"> group</th>
+                <th class="text-center align-middle" scope ="col"> Modify Status</th>
+                <th class="text-center align-middle" scope ="col"> Modify Group</th>
+
+
+
+            </tr>
+        </thead>
+
+        <tbody>  
+                {% for user in users%}
+                    {{ displayU( '#' ,user)}}
+                {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a class="btn btn-outline-success mx-4" href="/signup/">Add a user</a>
+</div>
+
+{% endblock%}

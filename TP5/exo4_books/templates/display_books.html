@@ -1,0 +1,52 @@
+{%extends "base.html" %}
+
+{% from "macro.html" import display %}
+
+{% block content %}
+
+<div class ="container mt-4">
+    <div class="navbar">
+        <div class="container-fluid">
+            
+            <div class="navbar-header">
+                <a class="btn btn-outline-danger mx-2" href="/logout" >LogOut</a> 
+            </div>
+            <div class="navbar-header">
+                <a class="btn btn-outline-success mx-2" href="/" >Go Home</a> 
+            </div>
+        </div>
+    </div>
+<div class="row"  id="list">   
+    <h2> You will find below the list of alls books aviables in our Library.</h2>
+</div>
+
+<div class="row">
+    <table class=" table table-sm table-striped mt-3">
+        <thead>
+            <tr>
+                <th class="text-center align-middle" scope ="col">#</th>
+                <th  class="text-center align-middle" scope ="col">ISBN</th>
+                <th class="text-center align-middle" scope ="col"> Title </th>
+                <th  class="text-center align-middle" scope ="col"> Author </th>
+                <th  class="text-center align-middle"scope ="col"> Editor </th>
+                <th  class="text-center align-middle" scope = "col"> Owner Firstname</th>
+                <th  class="text-center align-middle" scope = "col"> Owner Lastname</th>
+                <th class="text-center align-middle" scope = "col"> Owner Email</th>
+                <th class="text-center align-middle" scope = "col"> Price</th>
+                <th class="text-center align-middle" scope = "col"> Already Sold </th>
+                <th class="text-center align-middle" scope ="col"> Delete</th>
+                <th class="text-center align-middle" scope ="col"> Modify</th>
+
+            </tr>
+        </thead>
+
+        <tbody>  
+            {% for book, owner in data %}
+            {{ display('#', book, owner) }}
+            {% endfor %}
+    </table>
+</div>
+<a class="btn btn-outline-success mx-4" href="/creation/">Add a book</a>
+</div>
+
+{% endblock%}

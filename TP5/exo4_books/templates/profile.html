@@ -1,0 +1,41 @@
+{%extends "base.html" %}
+
+{% block content %}
+
+<div class="container center-content">
+    
+    <h3> {{message}}</h3>
+    <h1>Profile</h1>
+
+    <a class="btn btn-success my-4" href="/change_password">Change Password</a>
+
+    <form action="/update_profile " method="post" class="was-validated">
+        
+     
+            <div class="form-floating mb-3">
+                <input type="text" id="email" class="form-control"  name="email" value="{{ user.email }}">
+                <label for="email" class="form-label">Email</label>
+                
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" id="first_name" class="form-control"  name="first_name" value="{{ user.first_name }}">
+                <label for="first_name" class="form-label">Prénom</label>
+                
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" id="last_name" class="form-control" name="last_name" value="{{ user.last_name }}">
+                <label for="last_name" class="form-label">Nom</label>
+       
+            </div>
+        
+            
+        <button type="submit" class="btn btn-success my-4">Apply modifications</button>
+        
+        <a class="btn btn-outline-dark mx-2" href="/">Back</a>
+
+        
+    </form>
+        
+</div>
+
+{% endblock %}
