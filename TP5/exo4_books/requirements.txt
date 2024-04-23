@@ -9,3 +9,4 @@ starlette
 sqlalchemy
 passlib[bcrypt]
 passlib
+fastapi_login
