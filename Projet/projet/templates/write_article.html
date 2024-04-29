@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Editor{% endblock %}
+{% block head %}
+{{ super() }}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<div class="px-4 py-5">
+    <h1 class="display-5 fw-bold mb-4">Écris</h1>
+    <form id="post-form">
+        <div id="editor">
+            <p>Bonjour!</p>
+            <p><strong>Bienvenue!</strong> Vous pouvez écrire votre article ici.</p>
+            <p><br /></p>
+        </div>
+            <button type="submit" class="btn btn-primary btn-lg px-4 mt-3 gap-3">Poster</button>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+<script>
+  const quill = new Quill('#editor', {
+    theme: 'snow'
+  });
+  var form = document.getElementById('post-form');
+  form.addEventListener('formdata', (event) => {
+    // Append Quill content before submitting
+    event.formData.append('body', JSON.stringify(quill.getContents().ops));
+  });
+  form.onsubmit = function(event){
+    var xhr = new XMLHttpRequest();
+    var formData = new FormData(form);
+    //open the request
+    xhr.open('POST',`post`)
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    //send the form data
+    let data = JSON.stringify(Object.fromEntries(formData))
+    console.log(data);
+    xhr.send(data);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            form.reset(); //reset form after AJAX success or do something else
+        }
+    }
+    //Fail the onsubmit to avoid page refresh.
+    return false; 
+  }
+</script>
+{% endblock %}
