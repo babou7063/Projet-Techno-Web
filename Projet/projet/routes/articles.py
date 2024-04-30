@@ -8,10 +8,7 @@ from sqlalchemy.orm import Session
 from projet import models, schemas
 from projet.database import SessionLocal
 
-router = APIRouter(
-    prefix="/articles",
-    tags=["Articles"]
-)
+router = APIRouter(prefix="/articles",tags=["Articles"])
 templates = Jinja2Templates(directory="projet/templates")
 
 
@@ -22,6 +19,12 @@ def get_db():
     finally:
         db.close()
 
+@router.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(
+        "home.html",
+        context={'request': request}
+    )
 
 @router.get("/write", response_class=HTMLResponse)
 def write_article(request: Request):
@@ -55,3 +58,4 @@ def search_article(request: Request, q: Optional[str]=None, db: Session = Depend
             'articles': articles,
         }
     )
+

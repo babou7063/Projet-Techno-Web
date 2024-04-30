@@ -18,7 +18,7 @@ class Article(ArticleBase):
     author_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserBase(BaseModel):
@@ -35,4 +35,7 @@ class User(UserBase):
     articles: list[Article] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+class EmailSchema(BaseModel):
+    email: str

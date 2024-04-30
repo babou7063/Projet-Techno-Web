@@ -2,3 +2,4 @@ fastapi
 jinja2
 sqlalchemy
 uvicorn
+fastapi_mail

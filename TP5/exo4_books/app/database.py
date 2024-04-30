@@ -12,9 +12,6 @@ SessionLocal = sessionmaker(engine)
 class Base(DeclarativeBase):
     pass
 
-from app.models.book import Book
-from app.models.users import User
-
 
 def create_database():
     Base.metadata.create_all(engine)

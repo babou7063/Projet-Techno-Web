@@ -1,0 +1,57 @@
+{%extends "base.html" %}
+
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="b">
+    <div class="login-container">
+        <form id="signupForm" action="/signup" method="post">
+            <h2>Register</h2>
+            <div class="input-group">
+                <label for="firstname">Prénom:</label>
+                <input type="text" id="firstname" name="firstname" required>
+            </div>
+    
+            <div class="input-group">
+                <label for="lastname">Nom:</label>
+                <input type="text" id="lastname" name="lastname" required>
+            </div>
+    
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+    
+            <div class="input-group">
+                <label for="password">Mot de passe:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+    
+            <div class="input-group">
+                <label for="confirm-password">Confirmez le mot de passe:</label>
+                <input type="password" id="confirm-password" required>
+            </div>
+    
+            
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                alert("Les mots de passe ne correspondent pas.");
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+{% endblock %}
