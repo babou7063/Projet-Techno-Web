@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
+from projet.login_manager import login_manager 
 from projet import models, schemas
 from projet.database import SessionLocal
 
@@ -27,7 +28,7 @@ def home(request: Request):
     )
 
 @router.get("/write", response_class=HTMLResponse)
-def write_article(request: Request):
+def write_article(request: Request,user=Depends(login_manager)):
     return templates.TemplateResponse(
         "write_article.html",
         context={'request': request}
@@ -35,7 +36,7 @@ def write_article(request: Request):
 
 
 @router.post("/post")
-def post_article(article: schemas.ArticleCreate, db: Session = Depends(get_db)):
+def post_article(article: schemas.ArticleCreate, db: Session = Depends(get_db),user=Depends(login_manager)):
     user_id = 0 # FIXME: Add authentification
     db_article = models.Article(**article.model_dump(), author_id=user_id)
     db.add(db_article)

@@ -31,7 +31,7 @@ p = """<!DOCTYPE html>
         <h1>Demande de réinitialisation de mot de passe</h1>
         <p>Bonjour,</p>
         <p>Une demande de réinitialisation de mot de passe a été reçue pour votre compte. Si vous avez initié cette demande, veuillez suivre le lien ci-dessous pour réinitialiser votre mot de passe :</p>
-        <p><a href="https://example.com/reset-password?token={0}" class="link">Réinitialiser mon mot de passe</a></p>
+        <p><a href="http://localhost:8000/reset_password/{0}" class="link">Réinitialiser mon mot de passe</a></p>
         <p>Si vous n'avez pas demandé à réinitialiser votre mot de passe, veuillez ignorer cet email. Aucune modification ne sera apportée à votre compte.</p>
         <p>Merci,</p>
         <p>Votre équipe de support</p>

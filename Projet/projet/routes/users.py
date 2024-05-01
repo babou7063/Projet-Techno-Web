@@ -48,7 +48,7 @@ def login(email: str = Form(), password: str = Form()):
         )
 
     # Check if the user is blocked
-    if user.status == False:
+    if user.is_active == False:
         # Raise an exception if user is blocked
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -92,95 +92,6 @@ def logout():
     response.delete_cookie(login_manager.cookie_name, path='/')
     return response
 
-
-async def get_current_user_admin(request: Request):
-    """
-    Async function to get the current user and check if they are an admin.
-
-    Parameters:
-    - request: The incoming request object.
-
-    Returns the user if they are logged in and an admin, otherwise None.
-    """
-
-    try:
-        # Retrieve the current user from the session using login_manager
-        user = await login_manager(request)
-        # Check if the user exists and is an admin
-        if user and user.group == "admin":
-            return user
-        return None
-    except Exception:
-        # Return None in case of any exception
-        return None
-
-@router.get('/login_admin')
-async def display_login_page(request: Request):
-    """
-    Displays the admin login page or redirects an already logged-in admin to the admin panel.
-
-    Parameters:
-    - request: The incoming request object.
-
-    If an admin is already logged in, redirects to the admin panel. 
-    Otherwise, it renders the admin login page.
-    """
-
-    user = await get_current_user_admin(request)
-    if user:
-        # Redirect to the admin panel if already logged in as admin
-        return RedirectResponse(url="/admin", status_code=status.HTTP_302_FOUND)
-    
-    # Render the admin login page for non-authenticated or non-admin users
-    return templates.TemplateResponse("login_admin.html", context={'request': request})
-
-
-
-
-@router.post('/login_admin')
-def login_admin(email: str = Form(), password: str = Form()):
-    """
-    Handles admin login.
-
-    Parameters:
-    - email: Admin's email.
-    - password: Admin's password.
-
-    Verifies admin credentials. If successful, sets a session cookie and redirects to the admin panel.
-    Raises HTTP 401 Unauthorized for incorrect credentials or non-admin users.
-    """
-
-    db: Session = SessionLocal()
-    try:
-        # Query for the user by email
-        user = db.query(UserModel).filter(UserModel.email == email).first()
-        # Check for valid user and password match
-        if not user or not verify_password(password, user.password):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Vos identifiants sont incorrects."
-            )
-        # Ensure the user belongs to the admin group
-        if user.group != "admin":
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Vous n'appartenez pas au groupe 'admin'."
-            )
-        # Check if the user is blocked
-        if user.status == False:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Vous avez été bloqué sur cette page."
-            )
-        # Generate an access token for the user
-        access_token = login_manager.create_access_token(data={'sub': str(user.id)})
-        # Set the session cookie with the access token and redirect to admin panel
-        response = RedirectResponse(url="/admin", status_code=status.HTTP_302_FOUND)
-        response.set_cookie(key=login_manager.cookie_name, value=access_token, httponly=True)
-        return response
-    finally:
-        # Close the database session
-        db.close()
 
 
 @router.get('/signup')
@@ -251,9 +162,11 @@ def change_password(request:Request):
 
 @router.post("/forgot_password")
 async def simple_send(request:Request,email:str = Form()):
-    
+
     db = SessionLocal()
-    token_str = str(uuid4)
+    if db.query(UserModel).filter(UserModel.email == email).first() == None:
+        return templates.TemplateResponse("passwordfogot.html", context={'request': request,"message": "Your are not in our database user. Please create a new account instead."})
+    token_str = str(uuid4())
     token = Token(token=token_str, user_email=email)
     db.add(token)
     db.commit()
@@ -263,28 +176,40 @@ async def simple_send(request:Request,email:str = Form()):
         recipients=[email],
         body=p.format(token_str),
         subtype=MessageType.html)
-    with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
-        smtp.login("projetjournal91@gmail.com","++projetjournal91")
-        smtp.send_message(message)
-
+      
+    fm = FastMail(ConnectionConfig(
+    MAIL_USERNAME ="projetjournal91@gmail.com",
+    MAIL_PASSWORD = "mvrfdvklfrlvnetz",
+    MAIL_FROM = "projetjournal91@gmail.com",
+    MAIL_PORT = 465,
+    MAIL_SERVER = "smtp.gmail.com",
+    MAIL_STARTTLS = False,
+    MAIL_SSL_TLS = True,
+    USE_CREDENTIALS = True,
+    VALIDATE_CERTS = True))
+    await fm.send_message(message)
     return templates.TemplateResponse("passwordfogot.html", context={'request': request,"message": "email has been sent"})
 
 
-@router.get("/forgot_password/{token}")
+@router.get("/reset_password/{token}")
 def change(request:Request,token: str):
     db = SessionLocal()
-    id = get_token(db,token) 
-    if id != None:
-        return templates.TemplateResponse("changepassword.html", context={'request': request, 'users': db.query(UserModel).filter(UserModel.id == id).first()})
+    email = get_token(db,token) 
+    if email != None:
+        return templates.TemplateResponse("changepassword.html", context={'request': request, 'users': db.query(UserModel).filter(UserModel.email == email).first()})
 
     raise HTTPException(status_code=400, detail="tokens non valide , le lien doit avoir expriré veileuz réessayez depuis le debut.")
 
+@router.get("/change")
+def change(request:Request,user = Depends(login_manager)):
+    return templates.TemplateResponse("changepasswordprofile.html", context={'request': request, 'users': user })
 
-@router.post("/change/{user}")
-def change(request:Request, user, new_password: str = Form(), confirm_new_password: str = Form()):
+
+@router.post("/change/{email}")
+def change(request:Request, email, new_password: str = Form(), confirm_new_password: str = Form()):
     db = SessionLocal()
     try:
-        db_user = db.query(UserModel).filter(UserModel.id == user.id).first()
+        db_user = db.query(UserModel).filter(UserModel.email ==email).first()
         
         if not db_user:
             raise HTTPException(status_code=404, detail="User not found")
@@ -300,5 +225,75 @@ def change(request:Request, user, new_password: str = Form(), confirm_new_passwo
     finally:
         db.close()
 
-    return templates.TemplateResponse("/", context={'user': user, 'request':request, "message": "Password changed successfully"})
+    return templates.TemplateResponse("passwordfogot.html", context={'user': db_user, 'request':request, "message": "Password changed successfully"})
 
+@router.get("/profile")
+async def view_profile(request: Request, user: UserModel = Depends(login_manager)):
+    """
+    Displays the profile of the currently logged-in user.
+    Parameters:
+    - request: The incoming HTTP request.
+    - user: The currently logged-in user.
+
+    Returns a page showing the user's profile. If no user is logged in, an error is raised.
+    """
+
+    if not user:
+        raise HTTPException(status_code=401, detail="Non autorisé. Vous devez être Connecté.")
+
+    return templates.TemplateResponse("profile.html", context={'request': request, 'user': user})
+
+@router.post("/update_profile")
+async def update_profile(request: Request, email: str = Form(), first_name: str = Form(), last_name: str = Form(), user: UserModel = Depends(login_manager)):
+    """
+    Updates the profile of the current user.
+    Parameters:
+    - request: The incoming HTTP request.
+    - email: The new email address of the user.
+    - first_name: The new first name of the user.
+    - last_name: The new last name of the user.
+    - user: The currently logged-in user.
+
+    This function updates the user's profile information in the database and returns the updated profile page.
+    """
+
+    if not user:
+        raise HTTPException(status_code=401, detail="Non autorisé. Vous devez être Connecté")
+
+    db = SessionLocal()
+
+    try:
+        db_user = db.query(UserModel).filter(UserModel.id == user.id).first()
+        db_user.email = email
+        db_user.first_name = first_name
+        db_user.last_name = last_name
+        db.commit()
+
+        return templates.TemplateResponse("profile.html", context={'request': request, 'user': db_user, 'message': 'Profil mis à jour'})
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        db.close()
+
+@router.post("/changed")
+def change(request:Request, new_password: str = Form(), confirm_new_password: str = Form(),user=Depends(login_manager)):
+    db = SessionLocal()
+    try:
+        db_user = db.query(UserModel).filter(UserModel.email ==user.email).first()
+        
+        if not db_user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        if new_password != confirm_new_password:
+            raise HTTPException(status_code=400, detail="New passwords do not match")
+
+        db_user.password = hash_password(new_password) 
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        db.close()
+
+    return templates.TemplateResponse("profile.html", context={'user': user, 'request':request, "message": "Password changed successfully"})

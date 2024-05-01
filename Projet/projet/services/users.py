@@ -16,5 +16,5 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_token(db: Session, token_str: str):
     token = db.query(Token).filter(Token.token == token_str).first()
     if token and not token.is_expired():
-        return token.user_id
+        return token.user_email
     return None
