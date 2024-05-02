@@ -3,3 +3,7 @@ jinja2
 sqlalchemy
 uvicorn
 fastapi_mail
+fastapi-login
+passlib
+python-multipart
+bcrypt
