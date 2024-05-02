@@ -1,9 +1,22 @@
+.card[draggable="true"] {
+    cursor: move;
+}
+
 .container.my-4 {
     display: flex; 
     justify-content: space-around;
+    flex-wrap: wrap;  
 }
+
 .container.my-4 .list-container {
     text-align: left; 
-    width: 100%;
+    width: 100%;  
     margin-left: 20px;
 }
+
+.card:hover {
+    background-color: lightblue; 
+}
+
+
+
