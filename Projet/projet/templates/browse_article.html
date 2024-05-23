@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Search{% endblock %}
+{% block title %}Browse{% endblock %}
 {% block content %}
 {% include 'navbar.html' %}
 <div class="container m-4">
-    <h1 class="mb-3">Results</h1>
+    <h1 class="mb-3">Articles</h1>
     <div class="row row-cols-1 row-cols-md-2 
     row-cols-lg-3 g-4">
     {% for item in articles %}
@@ -22,11 +22,11 @@
                             {{item.body|truncate|safe}}
                         </p>
                         <a href="/articles/read/{{item.id}}" class="btn btn-primary stretched-link">Read</a>
-                        <p class="card-text position-absolute top-0 end-0 m-3">
+                        <span class="card-text position-absolute top-0 end-0 m-3">
                             <small class="text-muted">
                                 {{item.created_at.strftime("%d %b %Y %X")}}
                             </small>
-                        </p>
+                        </span>
                 </div>
                 </div>
             </div>

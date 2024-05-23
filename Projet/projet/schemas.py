@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class ArticleBase(BaseModel):
     body: str
-    # title: str
+    title: str
     # description: Union[str, None] = None
 
 

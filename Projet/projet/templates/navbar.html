@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-            <img src="../static/exemplelogo.png" alt="ACM Logo" height="30">
+        <a class="navbar-brand" href="/">
+            <img src="/static/exemplelogo.png" alt="ACM Logo" height="30">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -12,41 +12,61 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile">Profile</a>
+                    <a href="/articles/write" class="nav-link active">Write</a>
                 </li>
+                <!-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Explore
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a  class="dropdown-item" href="#">Journals</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Magazines</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Proceedings</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Books</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">SIGs</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Conferences</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">People</a>
+                        </li>
+                    </ul>
+                  </li> -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Journals</a>
+                    <a class="nav-link" href="/articles/browse">Browse</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Magazines</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Proceedings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Books</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">SIGs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Conferences</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">People</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Browse</a>
-                </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
-                </li>
+                </li> -->
             </ul>
-            <form class="d-flex">
-                <a class="btn btn-outline-danger" href="/logout">Sign Out</a>
-                <a class="btn btn-outline-success" href="/login">Sign in</a>
-                <a class="btn btn-success ms-2" href="/signup">Register</a>
+            <form class="d-flex" action="/articles/search/">
+                <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+            <li class="nav-item dropdown">
+                <a class="text-decoration-none text-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="rounded-circle bg-white" src="/static/pfp.png" alt="ACM Logo" height="30">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="/login">Sign in</a></li>
+                  <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                  <li>
+                    <a class="dropdown-item" href="/profile">Profile</a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="/signup">Register</a></li>
+                </ul>
+            </li>
         </div>
     </div>
   </nav>

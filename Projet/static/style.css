@@ -43,20 +43,6 @@ h2{
     border-radius: 5px;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background-color: #4caf50; /* Green color for the button */
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #43a047;
-}
-
 .signup-option {
     text-align: center;
     margin-top: 20px;

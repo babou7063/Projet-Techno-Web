@@ -7,26 +7,68 @@
 {% block content %}
 {% include 'navbar.html' %}
 <div class="px-4 py-5">
-    <h1 class="display-5 fw-bold mb-4">Écris</h1>
+    <h1 class="display-5 fw-bold mb-4">Write</h1>
     <form id="post-form">
+        <label for="title" class="form-label col-auto">Title</label>
+        <input type="text" name="title" id="title" placeholder="Your title" class="form-control mb-4">
+        <div id="toolbar-container">
+          <span class="ql-formats">
+            <select class="ql-font"></select>
+            <select class="ql-size"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-bold"></button>
+            <button class="ql-italic"></button>
+            <button class="ql-underline"></button>
+            <button class="ql-strike"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-script" value="sub"></button>
+            <button class="ql-script" value="super"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-blockquote"></button>
+            <button class="ql-code-block"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+            <button class="ql-indent" value="-1"></button>
+            <button class="ql-indent" value="+1"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-direction" value="rtl"></button>
+            <select class="ql-align"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-link"></button>
+            <button class="ql-formula"></button>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-clean"></button>
+          </span>
+        </div>
         <div id="editor">
-            <p>Bonjour!</p>
-            <p><strong>Bienvenue!</strong> Vous pouvez écrire votre article ici.</p>
+            <p>Hello!</p>
+            <p><strong>Welcome!</strong> You can write your article here.</p>
             <p><br /></p>
         </div>
-            <button type="submit" class="btn btn-primary btn-lg px-4 mt-3 gap-3">Poster</button>
+            <button type="submit" class="btn btn-primary btn-lg px-4 mt-3 gap-3">Post</button>
         </div>
     </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
 <script>
   const quill = new Quill('#editor', {
+    modules: {
+      toolbar: '#toolbar-container'
+    },
     theme: 'snow'
   });
   var form = document.getElementById('post-form');
   form.addEventListener('formdata', (event) => {
     // Append Quill content before submitting
-    event.formData.append('body', JSON.stringify(quill.getContents().ops));
+    event.formData.append('body', quill.root.innerHTML);
   });
   form.onsubmit = function(event){
     var xhr = new XMLHttpRequest();
@@ -42,7 +84,8 @@
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
-            form.reset(); //reset form after AJAX success or do something else
+          let resp = JSON.parse(xhr.responseText);
+          window.location.href = `${window.location.origin}/articles/read/${resp.id}`;
         }
     }
     //Fail the onsubmit to avoid page refresh.

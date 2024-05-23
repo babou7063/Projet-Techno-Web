@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String,DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from projet.database import Base
 from datetime import datetime, timedelta
 
@@ -50,8 +51,9 @@ class Article(Base):
 
     id = Column(Integer, primary_key=True)
     body = Column(String, index=True)
-    # title = Column(String, index=True)
+    title = Column(String, index=True)
     # description = Column(String, index=True)
+    created_at = Column(DateTime, server_default=func.now())
     author_id = Column(Integer, ForeignKey("users.id"))
 
     author = relationship("User", back_populates="articles")
@@ -62,7 +64,7 @@ class Token(Base):
     token = Column(String(72), primary_key=True)
     user_email = Column(Integer, ForeignKey('users.email'))
     user = relationship("User")
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, server_default=func.now())
     expires_in = Column(Integer, default=3600)  # Durée en secondes
 
     def is_expired(self):
