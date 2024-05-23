@@ -21,7 +21,17 @@
                         <p class="card-text">
                             {{item.body|truncate|safe}}
                         </p>
-                        <a href="/articles/read/{{item.id}}" class="btn btn-primary stretched-link">Read</a>
+                        <!-- Boutons Like et Dislike -->
+                        <span>
+                            <a href="/articles/like/{{item.id}}" class="bi bi-hand-thumbs-up"></a>
+                            <span>{{ item.likes }}</span>
+                        </span>
+                        <span>
+                            <a href="/articles/dislike/{{item.id}}" class="bi bi-hand-thumbs-down"></a>
+                            <span>{{ item.dislikes }}</span>
+                        </span>
+                        <!-- ----------------------- -->
+                        <a href="/articles/read/{{item.id}}" class="btn btn-primary">Read</a>
                         <p class="card-text position-absolute top-0 end-0 m-3">
                             <small class="text-muted">
                                 {{item.created_at.strftime("%d %b %Y %X")}}

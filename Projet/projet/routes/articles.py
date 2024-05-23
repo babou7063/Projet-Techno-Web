@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
@@ -88,3 +88,28 @@ def search_article(request: Request, db: Session = Depends(get_db)):
         }
     )
 
+@router.get("/like/{article_id}")
+def like_article(request: Request, article_id: int, db: Session = Depends(get_db)):
+    article = db.query(models.Article).get(article_id)
+    
+    article.likes += 1
+    db.commit()
+    db.refresh(article)
+    
+    referer = request.headers.get("referer")
+    if referer:
+        return RedirectResponse(url=referer)
+    return {"status": "success", "dislikes": article.dislikes}
+
+@router.get("/dislike/{article_id}")
+def dislike_article(request: Request, article_id: int, db: Session = Depends(get_db)):
+    article = db.query(models.Article).get(article_id)
+    
+    article.dislikes += 1
+    db.commit()
+    db.refresh(article)
+    
+    referer = request.headers.get("referer")
+    if referer:
+        return RedirectResponse(url=referer)
+    return {"status": "success", "dislikes": article.dislikes}
