@@ -43,7 +43,9 @@ class User(Base):
     password = Column(String(72))
     is_active = Column(Boolean, default=True)
     group = Column(String(2048), nullable=True)
+    
     articles = relationship("Article", back_populates="author")
+    comments = relationship("Comment", back_populates="author")
  
 
 class Article(Base):
@@ -55,8 +57,11 @@ class Article(Base):
     # description = Column(String, index=True)
     created_at = Column(DateTime, server_default=func.now())
     author_id = Column(Integer, ForeignKey("users.id"))
+    likes = Column(Integer, default=0)
+    dislikes = Column(Integer, default=0)
 
     author = relationship("User", back_populates="articles")
+    comments = relationship("Comment", back_populates="article")
 
 class Token(Base):
     "used for reset the passeword of a user"
@@ -69,3 +74,36 @@ class Token(Base):
 
     def is_expired(self):
         return datetime.utcnow() > self.created_at + timedelta(seconds=self.expires_in)
+    
+    
+class Comment(Base):
+    """
+    A class representing a comment.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the comment.
+    body : str
+        The content of the comment.
+    article_id : int
+        The ID of the article to which the comment belongs.
+    author_id : str
+        The ID of the user who posted the comment.
+    likes : int
+        The number of likes for the comment.
+    dislikes : int
+        The number of dislikes for the comment.
+    """
+
+    __tablename__ = 'comments'
+
+    id = Column(Integer, primary_key=True)
+    body = Column(String, index=True)
+    article_id = Column(Integer, ForeignKey("articles.id"))
+    author_id = Column(String(72), ForeignKey("users.id"))
+    likes = Column(Integer, default=0)
+    dislikes = Column(Integer, default=0)
+
+    article = relationship("Article", back_populates="comments")
+    author = relationship("User", back_populates="comments")

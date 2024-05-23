@@ -2,7 +2,25 @@ from typing import Union
 
 from pydantic import BaseModel
 
+class CommentBase(BaseModel):
+    body: str
 
+
+class CommentCreate(CommentBase):
+    pass
+
+
+class Comment(CommentBase):
+    id: int
+    article_id: int
+    author_id: str
+    likes: int
+    dislikes: int
+
+    class Config:
+        from_attributes = True
+
+        
 class ArticleBase(BaseModel):
     body: str
     title: str
@@ -16,7 +34,10 @@ class ArticleCreate(ArticleBase):
 class Article(ArticleBase):
     id: int
     author_id: int
-
+    likes: int
+    dislikes: int
+    comments: list[Comment] = []
+    
     class Config:
         from_attributes = True
 
@@ -33,9 +54,11 @@ class User(UserBase):
     id: int
     is_active: bool
     articles: list[Article] = []
+    comments: list[Comment] = []
 
     class Config:
         from_attributes = True
 
 class EmailSchema(BaseModel):
     email: str
+    
