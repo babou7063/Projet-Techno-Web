@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ author.first_name }} {{ author.last_name }}'s Articles{% endblock %}
+{% block head %}
+{{ super() }}
+<style>
+    body {
+        background: linear-gradient(to right, #2c3e50, #4ca1af);
+    }
+    .articles-container {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 2rem;
+    }
+    .article-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .btn-primary {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+    .btn-primary:hover {
+        background-color: #1c5985;
+        border-color: #1c5985;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container my-5">
+    <div class="articles-container">
+        <h1 class="mb-4 text-center">{{ author.first_name }} {{ author.last_name }}'s Articles</h1>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for article in articles %}
+            <div class="col">
+                <div class="article-card">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.body|truncate|safe }}</p>
+                    <a href="/articles/read/{{ article.id }}" class="btn btn-primary w-100">Read</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
