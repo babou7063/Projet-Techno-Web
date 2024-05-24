@@ -2,10 +2,19 @@
 {% block title %}Read{% endblock %}
 {% block content %}
 {% include 'navbar.html' %}
-<div class="container m-4 position-relative">
-    <h1>{{article.title}}</h1>
-    <h5 class="text-muted">{{article.author.first_name}} {{article.author.last_name}}</h2>
-    <h5 class="position-absolute top-0 end-0 text-secondary">{{article.created_at.strftime("%d %b %Y %X")}}</h3>
-    {{article.body|safe}}
-</div> 
+
+<div class="container my-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title">{{ article.title }}</h1>
+            <h5 class="card-subtitle mb-2 text-muted">{{ article.author.first_name }} {{ article.author.last_name }}</h5>
+            <h6 class="text-secondary position-absolute top-0 end-0 m-3">{{ article.created_at.strftime("%d %b %Y %X") }}</h6>
+            <hr>
+            <div class="card-text">
+                {{ article.body|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -1,12 +1,11 @@
 {%extends "base.html" %}
 
-
 {% block content %}
 {% include 'navbar.html' %}
 <div class="b">
     <div class="login-container">
         <form id="signupForm" action="/signup" method="post">
-            <h2>Register</h2>
+            <h2><i class="bi bi-person-plus"></i> Register</h2>
             <div class="input-group">
                 <label for="firstname">Prénom:</label>
                 <input type="text" id="firstname" name="firstname" required>
@@ -32,8 +31,10 @@
                 <input type="password" id="confirm-password" required>
             </div>
     
-            
-            <button class="btn btn-primary" type="submit">Register</button>
+            <div class="d-grid gap-1 col-6 mx-auto mb-3">
+
+            <button class="btn btn-primary" id ="bh" type="submit">Register</button>
+            </div>
         </form>
     </div>
 </div>

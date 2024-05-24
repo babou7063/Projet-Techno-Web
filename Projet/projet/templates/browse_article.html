@@ -1,48 +1,65 @@
 {% extends "base.html" %}
-{% block title %}Browse{% endblock %}
+{% block title %}Search{% endblock %}
 {% block content %}
 {% include 'navbar.html' %}
-<div class="container m-4">
-    <h1 class="mb-3">Articles</h1>
-    <div class="row row-cols-1 row-cols-md-2 
-    row-cols-lg-3 g-4">
-    {% for item in articles %}
-    <div class="col">
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-auto position-relative">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {{item.title}}
-                        </h5>
-                        <h5 class="card-subtitle text-muted">
-                            {{item.author.first_name}} {{item.author.last_name}}
-                        </h5>
-                        <p class="card-text">
-                            {{item.body|truncate|safe}}
-                        </p>
-                        <!-- Boutons Like et Dislike -->
-                        <span>
-                            <a href="/articles/like/{{item.id}}" class="bi bi-hand-thumbs-up"></a>
-                            <span>{{ item.likes }}</span>
-                        </span>
-                        <span>
-                            <a href="/articles/dislike/{{item.id}}" class="bi bi-hand-thumbs-down"></a>
-                            <span>{{ item.dislikes }}</span>
-                        </span>
-                        <!-- ----------------------- -->
-                        <a href="/articles/read/{{item.id}}" class="btn btn-primary">Read</a>
-                        <span class="card-text position-absolute top-0 end-0 m-3">
-                            <small class="text-muted">
-                                {{item.created_at.strftime("%d %b %Y %X")}}
-                            </small>
-                        </span>
-                </div>
+
+<style>
+    body {
+        background: linear-gradient(to right, #2c3e50, #4ca1af);
+    }
+    .results-container {
+        max-height: 80vh; /* Limite la hauteur du conteneur pour permettre le défilement */
+        overflow-y: auto; /* Active le défilement vertical */
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.9); /* Fond blanc avec légère transparence */
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .card {
+        background: #ffffff;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-title, .card-subtitle {
+        color: #333;
+    }
+    .btn-primary {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+    .btn-primary:hover {
+        background-color: #1c5985;
+        border-color: #1c5985;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="results-container">
+        <h1 class="mb-4 text-center">Results</h1>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for item in articles %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ item.author.first_name }} {{ item.author.last_name }}</h6>
+                        <p class="card-text flex-grow-1">{{ item.body|truncate|safe }}</p>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <div>
+                                <a href="/articles/like/{{ item.id }}" class="bi bi-hand-thumbs-up me-1"></a>
+                                <span>{{ item.likes }}</span>
+                                <a href="/articles/dislike/{{ item.id }}" class="bi bi-hand-thumbs-down ms-3 me-1"></a>
+                                <span>{{ item.dislikes }}</span>
+                            </div>
+                            <small class="text-muted">{{ item.created_at.strftime("%d %b %Y %X") }}</small>
+                        </div>
+                        <a href="/articles/read/{{ item.id }}" class="btn btn-primary w-100 mt-3">Read</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-    </div>
-    {% endfor %}
     </div>
 </div>
 

@@ -1,14 +1,65 @@
-{%extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center vh-100">
-    <div class="text-center">
-	<h1 class="display-1 fw-bold">400</h1>
-	<p class="fs-3"> <span class="text-danger">Bad Request.</span></p>
-	<p class="lead">
-	    {{exception.detail}}
-	</p>
-	<a href="/" class="btn btn-primary">Go Home</a>
-    </div>
+<style>
+    body {
+        background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .error-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .error-title {
+        font-size: 6rem;
+        font-weight: bold;
+        color: #ff6f61;
+    }
+
+    .error-detail {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+        color: #333;
+    }
+
+    .error-message {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 2rem;
+    }
+
+    .btn-primary {
+        background-color: #ff6f61;
+        border-color: #ff6f61;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background-color: #e65c50;
+        border-color: #e65c50;
+    }
+</style>
+
+<div class="error-container">
+    <h1 class="error-title">400</h1>
+    <p class="fs-3"> <span class="text-danger">Bad Request.</span></p>
+    <p class="error-detail">
+        {{ exception.detail }}
+    </p>
+    <a href="/" class="btn btn-primary">Go Home</a>
 </div>
 {% endblock %}
