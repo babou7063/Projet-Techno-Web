@@ -5,11 +5,12 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
-
+from fastapi import BackgroundTasks
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 from projet.login_manager import login_manager 
 from projet import models, schemas
 from projet.database import SessionLocal
-
+from fastapi import BackgroundTasks
 router = APIRouter(prefix="/articles",tags=["Articles"])
 templates = Jinja2Templates(directory="projet/templates")
 
@@ -36,13 +37,50 @@ def write_article(request: Request, _user=Depends(login_manager)):
     )
 
 
+
+
 @router.post("/post")
-def post_article(article: schemas.ArticleCreate, db: Session = Depends(get_db), user: models.User=Depends(login_manager)):
-    db_article = models.Article(**article.model_dump(), author_id=user.id)
+def post_article(
+    article: schemas.ArticleCreate,
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(login_manager)
+
+):
+    db_article = models.Article(**article.dict(), author_id=user.id)
     db.add(db_article)
     db.commit()
     db.refresh(db_article)
+    
+    # Get subscribers
+    subscriptions = db.query(models.Subscription).filter_by(author_id=user.id).all()
+    subscriber_emails = [subscription.user.email for subscription in subscriptions]
+    
+    # Send email to subscribers
+   
+
+    message = MessageSchema(
+        subject="New Article Posted",
+        recipients=subscriber_emails,
+        body=f"Hi, {user.first_name} {user.last_name} has posted a new article titled '{db_article.title}'. Check it out!",
+        subtype="html"
+    )
+
+    fm = FastMail(ConnectionConfig(
+    MAIL_USERNAME ="projetjournal91@gmail.com",
+    MAIL_PASSWORD = "mvrfdvklfrlvnetz",
+    MAIL_FROM = "projetjournal91@gmail.com",
+    MAIL_PORT = 465,
+    MAIL_SERVER = "smtp.gmail.com",
+    MAIL_STARTTLS = False,
+    MAIL_SSL_TLS = True,
+    USE_CREDENTIALS = True,
+    VALIDATE_CERTS = True))
+
+    background_tasks.add_task(fm.send_message,message)
+
     return db_article
+
 
 @router.get("/read/{article_id}")
 def read_article(request: Request, article_id: int, db: Session = Depends(get_db)):

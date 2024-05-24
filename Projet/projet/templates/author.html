@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Authors{% endblock %}
+{% block head %}
+{{ super() }}
+<style>
+    body {
+        background: linear-gradient(to right, #2c3e50, #4ca1af);
+    }
+    .author-container {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 2rem;
+    }
+    .author-card {
+        background: #ffffff;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .btn-primary, .btn-outline-primary {
+        background-color: #2980b9;
+        border-color: #2980b9;
+        color: white;
+    }
+    .btn-primary:hover, .btn-outline-primary:hover {
+        background-color: #1c5985;
+        border-color: #1c5985;
+    }
+</style>
+{% endblock %}
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container my-5">
+    <div class="author-container">
+        <h1 class="mb-4 text-center">Authors</h1>
+        {% if request.query_params.message %}
+        <div class="alert alert-success" role="alert">
+            {{ request.query_params.message }}
+        </div>
+        {% endif %}
+        <form class="d-flex mb-4" action="/author">
+            <input class="form-control me-2" type="search" name="q" placeholder="Search authors" value="{{ query or '' }}">
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+        </form>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for author in Authors %}
+            <div class="col">
+                <div class="author-card d-flex flex-column align-items-start">
+                    <h5 class="mb-1">{{ author.first_name }} {{ author.last_name }}</h5>
+                    <p class="text-muted mb-2">{{ author.email }}</p>
+                    <div class="d-flex justify-content-between w-100 mt-auto">
+                        <a href="/author/{{ author.id }}" class="btn btn-outline-primary">View Articles</a>
+                        <a href="/subscribe/{{ author.id }}" class="btn btn-primary">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

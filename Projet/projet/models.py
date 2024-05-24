@@ -6,6 +6,20 @@ from projet.database import Base
 from datetime import datetime, timedelta
 
 
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
+from .database import Base
+
+class Subscription(Base):
+    __tablename__ = 'subscriptions'
+   
+    user_id = Column(String(72), ForeignKey('users.id'), primary_key=True)
+    author_id = Column(String(72), ForeignKey('users.id'), primary_key=True)
+    user = relationship("User", foreign_keys=[user_id], back_populates="subscriptions")
+    author = relationship("User", foreign_keys=[author_id], back_populates="subscribers")
+
+
+
 class User(Base):
     """
     A class representing a user.
@@ -43,9 +57,14 @@ class User(Base):
     password = Column(String(72))
     is_active = Column(Boolean, default=True)
     group = Column(String(2048), nullable=True)
-    
+
     articles = relationship("Article", back_populates="author")
     comments = relationship("Comment", back_populates="author")
+    subscriptions = relationship("Subscription", foreign_keys=[Subscription.user_id], back_populates="user")
+    subscribers = relationship("Subscription", foreign_keys=[Subscription.author_id], back_populates="author")
+
+
+    
  
 
 class Article(Base):

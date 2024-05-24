@@ -1,8 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from uuid import uuid4
 from fastapi import APIRouter, Depends, Form, HTTPException, status, Request
 from fastapi.responses import  RedirectResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import or_
 from projet.services.users import get_token, verify_password,hash_password
 from typing import Annotated
 from projet.login_manager import login_manager
@@ -13,11 +14,19 @@ templates = Jinja2Templates(directory="projet/templates")
 
 from sqlalchemy.orm import Session
 from projet.models import User as UserModel
+from projet.models import Subscription as SubscriptionModel
+from projet.models import Article as ArticleModel
 from projet.models import Token
 from projet.database import SessionLocal
 from projet.schemas import EmailSchema
 from projet.services.reset import p
 
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 @router.post('/login')
 def login(email: str = Form(), password: str = Form()):
     """
@@ -142,8 +151,80 @@ def create_user(firstname: str = Form(), lastname: str = Form(), email: str = Fo
     # Redirect to the homepage after successful registration
     return RedirectResponse(url="/", status_code=302)
 
+@router.get("/author/{author_id}")
+def author_articles(request: Request, author_id: str, db: Session = Depends(get_db)):
+    author = db.query(UserModel).get(author_id)
+    articles = db.query(ArticleModel).filter(ArticleModel.author_id == author_id).all()
+    return templates.TemplateResponse(
+        "articleAuthors.html",
+        context={
+            'request': request,
+            'author': author,
+            'articles': articles,
+        }
+    )
+
+@router.get("/subscribe/{author_id}")
+def subscribe_author(author_id: str, db: Session = Depends(get_db), user: UserModel = Depends(login_manager)):
+    if user.id == author_id:
+        return RedirectResponse(url="/author?message=You cannot subscribe to yourself", status_code=302)
+    
+    already = db.query(SubscriptionModel).filter_by(user_id=user.id, author_id=author_id).first()
+    if already != None:
+        return RedirectResponse(url="/author?message=Already subscribed", status_code=302)
+    
+    subscription = SubscriptionModel(user_id=user.id, author_id=author_id)
+    db.add(subscription)
+    db.commit()
+    return RedirectResponse(url="/author?message=Subscription successful", status_code=302)
+
+@router.post("/unsubscribe/{author_id}")
+def unsubscribe_author(author_id: str, db: Session = Depends(get_db), user: UserModel = Depends(login_manager)):
+    subscription = db.query(SubscriptionModel).filter_by(user_id=user.id, author_id=author_id).first()
+    if subscription:
+        db.delete(subscription)
+        db.commit()
+    return RedirectResponse(url="/subscriptions", status_code=302)
+
+@router.get("/subscriptions")
+def subscriptions(request: Request, db: Session = Depends(get_db), user: UserModel = Depends(login_manager)):
+    subscriptions = db.query(SubscriptionModel).filter_by(user_id=user.id).all()
+    authors = [sub.author for sub in subscriptions]
+    return templates.TemplateResponse(
+        "subscriptions.html",
+        context={'request': request, 'authors': authors}
+    )
+
+@router.get("/subscribers")
+def get_subscribers( request: Request, db: Session = Depends(get_db), user: UserModel= Depends(login_manager)):
+    # Verify that the logged-in user is the author or has permission
+    
+    # Get the subscribers for the author
+    subscriptions = db.query(SubscriptionModel).filter_by(author_id=user.id).all()
+    subscribers = [sub.user for sub in subscriptions]
+
+    return templates.TemplateResponse(
+        "subscribers.html",
+        context={'request': request, 'subscribers': subscribers}
+    )
 
 
+@router.get("/author")
+def get_author(request: Request, q: Optional[str] = None, db: Session = Depends(get_db)):
+    if q:
+        authors = db.query(UserModel).filter(
+            or_(
+                UserModel.first_name.contains(q),
+                UserModel.last_name.contains(q)
+            )
+        ).all()
+    else:
+        authors = db.query(UserModel).join(ArticleModel).distinct(UserModel.id).all()
+    
+    return templates.TemplateResponse(
+        "author.html",
+        context={'request': request, 'Authors': authors, 'query': q}
+    )
 
 @router.get("/change_password")
 def change_password(request:Request,user = Depends(login_manager)):
