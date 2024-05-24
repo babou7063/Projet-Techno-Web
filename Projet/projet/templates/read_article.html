@@ -2,7 +2,6 @@
 {% block title %}Read{% endblock %}
 {% block content %}
 {% include 'navbar.html' %}
-{% for article in articles %}
 <div class="container my-5">
     <div class="card shadow-sm">
         <div class="card-body">
@@ -16,33 +15,33 @@
         </div>
     </div>
 </div>
-<hr class="mx-3">
-<div class="container m-4 position-relative">
-    <h3>Comment section</h3>
-    <form id="post-form">
-        <input type="text" name="comment" id="comment" placeholder="Add your comment" class="form-control mb-2">
-        <button type="submit" class="btn btn-primary mb-4">Post</button>
-    </form>
-    <div id="comments-list">
-        {% for com in article.comments %}
-        <div class="comment mb-3">
-            <small class="text-muted">Posted by {{ com.author.first_name }} {{ com.author.last_name }} on {{ com.created_at.strftime("%d %b %Y %X") }}</small>
-            <p class="mb-1">{{ com.body }}</p>
-            <!-- Boutons Like et Dislike -->
-            <span>
-                <a href="/articles/comments/like/{{ article.id }}/{{ com.id }}" class="bi bi-hand-thumbs-up"></a>
-                <span>{{ com.likes }}</span>
-            </span>
-            <span>
-                <a href="/articles/comments/dislike/{{ article.id }}/{{ com.id }}" class="bi bi-hand-thumbs-down"></a>
-                <span>{{ com.dislikes }}</span>
-            </span>
-            <!-- ----------------------- -->
+<div class="container my-5">
+    <div class="card shadow-sm p-3">
+        <h3 class="mt-2">Comment section</h3>
+        <form id="post-form">
+            <input type="text" name="comment" id="comment" placeholder="Add your comment" class="form-control mb-2">
+            <button type="submit" class="btn btn-primary mb-4">Post</button>
+        </form>
+        <div id="comments-list">
+            {% for com in article.comments %}
+            <div class="comment mb-3">
+                <small class="text-muted">Posted by {{ com.author.first_name }} {{ com.author.last_name }} on {{ com.created_at.strftime("%d %b %Y %X") }}</small>
+                <p class="mb-1">{{ com.body }}</p>
+                <!-- Boutons Like et Dislike -->
+                <span>
+                    <a href="/articles/comments/like/{{ article.id }}/{{ com.id }}" class="bi bi-hand-thumbs-up"></a>
+                    <span>{{ com.likes }}</span>
+                </span>
+                <span>
+                    <a href="/articles/comments/dislike/{{ article.id }}/{{ com.id }}" class="bi bi-hand-thumbs-down"></a>
+                    <span>{{ com.dislikes }}</span>
+                </span>
+                <!-- ----------------------- -->
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
-{% endfor %}
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
