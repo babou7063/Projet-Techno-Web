@@ -2,12 +2,13 @@ from typing import Union
 
 from pydantic import BaseModel
 
+
 class CommentBase(BaseModel):
     body: str
 
 
-class CommentCreate(CommentBase):
-    pass
+class CommentCreate(BaseModel):
+    body: str
 
 
 class Comment(CommentBase):
@@ -20,6 +21,19 @@ class Comment(CommentBase):
     class Config:
         from_attributes = True
 
+
+class LikeDislikeBase(BaseModel):
+    user_id: str
+    article_id: int
+    is_like: bool
+
+
+class LikeDislikeCreate(LikeDislikeBase):
+    pass
+
+
+class LikeDislike(LikeDislikeBase):
+    id: int
         
 class ArticleBase(BaseModel):
     body: str

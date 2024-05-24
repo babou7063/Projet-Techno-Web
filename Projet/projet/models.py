@@ -46,6 +46,8 @@ class User(Base):
     
     articles = relationship("Article", back_populates="author")
     comments = relationship("Comment", back_populates="author")
+    likes_dislikes_article = relationship("LikeDislikeArticle", back_populates="user")
+    likes_dislikes_comment = relationship("LikeDislikeComments", back_populates="user")
  
 
 class Article(Base):
@@ -54,20 +56,20 @@ class Article(Base):
     id = Column(Integer, primary_key=True)
     body = Column(String, index=True)
     title = Column(String, index=True)
-    # description = Column(String, index=True)
     created_at = Column(DateTime, server_default=func.now())
-    author_id = Column(Integer, ForeignKey("users.id"))
+    author_id = Column(String(72), ForeignKey("users.id"))
     likes = Column(Integer, default=0)
     dislikes = Column(Integer, default=0)
 
     author = relationship("User", back_populates="articles")
     comments = relationship("Comment", back_populates="article")
+    likes_dislikes_article = relationship("LikeDislikeArticle", back_populates="article")
 
 class Token(Base):
-    "used for reset the passeword of a user"
+    "used for reset the password of a user"
     __tablename__ = 'tokens'
     token = Column(String(72), primary_key=True)
-    user_email = Column(Integer, ForeignKey('users.email'))
+    user_email = Column(String(72), ForeignKey('users.email'))
     user = relationship("User")
     created_at = Column(DateTime, server_default=func.now())
     expires_in = Column(Integer, default=3600)  # Durée en secondes
@@ -102,8 +104,34 @@ class Comment(Base):
     body = Column(String, index=True)
     article_id = Column(Integer, ForeignKey("articles.id"))
     author_id = Column(String(72), ForeignKey("users.id"))
+    created_at = Column(DateTime, server_default=func.now())
     likes = Column(Integer, default=0)
     dislikes = Column(Integer, default=0)
 
     article = relationship("Article", back_populates="comments")
     author = relationship("User", back_populates="comments")
+    likes_dislikes_comments = relationship("LikeDislikeComments", back_populates="comment")
+    
+    
+class LikeDislikeArticle(Base):
+    __tablename__ = "likes_dislikes_article"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(72), ForeignKey("users.id"))
+    article_id = Column(Integer, ForeignKey("articles.id"))
+    is_like = Column(Boolean, nullable=False)
+
+    user = relationship("User", back_populates="likes_dislikes_article")
+    article = relationship("Article", back_populates="likes_dislikes_article")
+    
+
+class LikeDislikeComments(Base):
+    __tablename__ = "likes_dislikes_comments"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(72), ForeignKey("users.id"))
+    comment_id = Column(Integer, ForeignKey("comments.id"))
+    is_like = Column(Boolean, nullable=False)
+
+    user = relationship("User", back_populates="likes_dislikes_comment")
+    comment = relationship("Comment", back_populates="likes_dislikes_comments")
