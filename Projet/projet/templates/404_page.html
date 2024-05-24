@@ -1,14 +1,67 @@
-{%extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex align-items-center justify-content-center vh-100">
-    <div class="text-center">
-	<h1 class="display-1 fw-bold">404</h1>
-	<p class="fs-3"> <span class="text-danger">Opps!</span> Page not found.</p>
-	<p class="lead">
-	    The page you’re looking for doesn’t exist.
-	</p>
-	<a href="/" class="btn btn-primary">Go Home</a>
-    </div>
+<style>
+    body {
+        background: linear-gradient(to right, #2c3e50, #4ca1af);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        color: white;
+    }
+
+    .error-container {
+        background: #1a252f;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+    }
+
+    .error-title {
+        font-size: 6rem;
+        font-weight: bold;
+        color: #70e1dc;
+    }
+
+    .error-detail {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+        color: #bdc3c7;
+    }
+
+    .error-message {
+        font-size: 1.2rem;
+        color: #95a5a6;
+        margin-bottom: 2rem;
+    }
+
+    .btn-primary {
+        background-color: #2980b9;
+        border-color: #2980b9;
+        padding: 0.75rem 1.5rem;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #1c5985;
+        border-color: #1c5985;
+    }
+</style>
+
+<div class="error-container">
+    <h1 class="error-title">404</h1>
+    <p class="fs-3"> <span class="text-danger">Cette page n'existe pas.</span></p>
+    <p class="error-detail">
+        {{ exception.detail }}
+    </p>
+    <a href="/" class="btn btn-primary">Go Home</a>
 </div>
 {% endblock %}

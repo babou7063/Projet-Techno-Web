@@ -2,17 +2,22 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 {% include 'navbar.html' %}
-<div class="px-4 py-5 text-center">
-    <!-- <img class="d-block mx-auto mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-    <h1 class="display-5 fw-bold">Page d'accueil</h1>
-    <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4">Mettre ici une description du site ou autre chose.</p>
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-        <a href="/articles/write"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Write</button></a>
-        <a href="/articles/browse"><button type="button" class="btn btn-primary btn-lg px-4 gap-3">Browse</button></a>
-      </div>
+
+
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100" id="home">
+    
+    <div class="mb-4 lead text-center">
+        <img src="/static/exemplelogo.png" class="img-fluid" alt="ACM Logo" style="max-width: 40%; height: auto;">
+    </div>
+    
+   
+    <h1 class="display-4 fw-bold text-center">Bienvenue sur notre site!</h1>
+    
+    
+    <div class="d-grid gap-2 d-sm-flex justify-content-center">
+        <a href="/articles/write" id = "bh1" class="btn btn-primary btn-lg ">Write</a>
+        <a href="/articles/browse" id = "bh1" class="btn btn-primary btn-lg">Browse</a>
     </div>
 </div>
+
 {% endblock %}
-
-

@@ -14,59 +14,26 @@
                 <li class="nav-item">
                     <a href="/articles/write" class="nav-link">Write</a>
                 </li>
-                <!-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Explore
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a  class="dropdown-item" href="#">Journals</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Magazines</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Proceedings</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Books</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">SIGs</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">Conferences</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">People</a>
-                        </li>
-                    </ul>
-                  </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="/articles/browse">Browse</a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li> -->
             </ul>
-            <form class="d-flex" action="/articles/search/">
+            <form class="d-flex me-4" action="/articles/search/"> 
                 <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
             <li class="nav-item dropdown">
-                <a class="text-decoration-none text-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="text-decoration-none text-light dropdown-toggle ms-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <img class="rounded-circle bg-white" src="/static/pfp.png" alt="ACM Logo" height="30">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><a class="dropdown-item" href="/login">Sign in</a></li>
-                  <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-                  <li>
-                    <a class="dropdown-item" href="/profile">Profile</a>
-                  </li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="/signup">Register</a></li>
+                    <li><a class="dropdown-item" href="/login">Sign in</a></li>
+                    <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+                    <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/signup">Register</a></li>
                 </ul>
             </li>
         </div>
     </div>
-  </nav>
+</nav>

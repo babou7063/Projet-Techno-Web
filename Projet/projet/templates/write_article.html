@@ -3,60 +3,98 @@
 {% block head %}
 {{ super() }}
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />
+<style>
+    body {
+        background: linear-gradient(to right, #2c3e50, #4ca1af);
+    }
+    .editor-container {
+        max-width: 900px;
+        margin: auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    #editor {
+        height: 300px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px;
+    }
+    #toolbar-container {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    .btn-primary {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+    .btn-primary:hover {
+        background-color: #1c5985;
+        border-color: #1c5985;
+    }
+</style>
 {% endblock %}
 {% block content %}
 {% include 'navbar.html' %}
-<div class="px-4 py-5">
-    <h1 class="display-5 fw-bold mb-4">Write</h1>
-    <form id="post-form">
-        <label for="title" class="form-label col-auto">Title</label>
-        <input type="text" name="title" id="title" placeholder="Your title" class="form-control mb-4">
-        <div id="toolbar-container">
-          <span class="ql-formats">
-            <select class="ql-font"></select>
-            <select class="ql-size"></select>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-bold"></button>
-            <button class="ql-italic"></button>
-            <button class="ql-underline"></button>
-            <button class="ql-strike"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-script" value="sub"></button>
-            <button class="ql-script" value="super"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-blockquote"></button>
-            <button class="ql-code-block"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-list" value="ordered"></button>
-            <button class="ql-list" value="bullet"></button>
-            <button class="ql-indent" value="-1"></button>
-            <button class="ql-indent" value="+1"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-direction" value="rtl"></button>
-            <select class="ql-align"></select>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-link"></button>
-            <button class="ql-formula"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-clean"></button>
-          </span>
-        </div>
-        <div id="editor">
-            <p>Hello!</p>
-            <p><strong>Welcome!</strong> You can write your article here.</p>
-            <p><br /></p>
-        </div>
-            <button type="submit" class="btn btn-primary btn-lg px-4 mt-3 gap-3">Post</button>
-        </div>
-    </form>
+
+<div class="container my-5">
+    <div class="editor-container">
+        <h1 class="display-5 fw-bold mb-4 text-center">Write</h1>
+        <form id="post-form">
+            <div class="mb-4">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" name="title" id="title" placeholder="Your title" class="form-control">
+            </div>
+            <div id="toolbar-container">
+                <span class="ql-formats">
+                    <select class="ql-font"></select>
+                    <select class="ql-size"></select>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-bold"></button>
+                    <button class="ql-italic"></button>
+                    <button class="ql-underline"></button>
+                    <button class="ql-strike"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-script" value="sub"></button>
+                    <button class="ql-script" value="super"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-blockquote"></button>
+                    <button class="ql-code-block"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-list" value="ordered"></button>
+                    <button class="ql-list" value="bullet"></button>
+                    <button class="ql-indent" value="-1"></button>
+                    <button class="ql-indent" value="+1"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-direction" value="rtl"></button>
+                    <select class="ql-align"></select>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-link"></button>
+                    <button class="ql-formula"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-clean"></button>
+                </span>
+            </div>
+            <div id="editor">
+                <p>Hello!</p>
+                <p><strong>Welcome!</strong> You can write your article here.</p>
+                <p><br /></p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg px-4 mt-4">Post</button>
+        </form>
+    </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
 <script>
   const quill = new Quill('#editor', {
