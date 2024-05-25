@@ -5,16 +5,16 @@
 <div class="container my-5">
     <div class="card shadow-sm">
         <div class="card-body">
-            <h1 class="card-title">{{ article.title }}</h1>
+            <h1 class="card-title my-3">{{ article.title }}</h1>
             <h5 class="card-subtitle mb-2 text-muted">{{ article.author.first_name }} {{ article.author.last_name }}</h5>
             <h6 class="text-secondary position-absolute top-0 end-0 m-3">{{ article.created_at.strftime("%d %b %Y %X") }}</h6>
             <hr>
             <div class="card-text">
                 {{ article.body|safe }}
             </div>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=URL" class="bi bi-facebook" target="_blank"></a>
-            <a href="https://www.linkedin.com/share?id=URL" class="bi bi-linkedin" target="_blank"></a>
-            <a href="http://www.twitter.com/share?url=URL" class="bi bi-twitter" target="_blank"></a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{request.url}}" class="bi bi-facebook" target="_blank"></a>
+            <a href="https://www.linkedin.com/share?id={{request.url}}" class="bi bi-linkedin" target="_blank"></a>
+            <a href="http://www.twitter.com/share?url={{request.url}}" class="bi bi-twitter" target="_blank"></a>
         </div>
     </div>
 </div>
