@@ -132,9 +132,16 @@ def post_article(
     return db_article
     
 
+async def get_optional_user(request: Request):
+    try:
+        user = await login_manager(request)
+        return user
+    except Exception:
+        return None
+
 
 @router.get("/read/{article_id}")
-def read_article(request: Request, article_id: int, db: Session = Depends(get_db)):
+def read_article(request: Request, article_id: int, db: Session = Depends(get_db), user: Optional[models.User] = Depends(get_optional_user)):
     """
     Retrieve an article from the database and its comments, and return the read article page.
 
@@ -157,7 +164,8 @@ def read_article(request: Request, article_id: int, db: Session = Depends(get_db
         "read_article.html",  # Template file path.
         context={
             'request': request,  # Template context data.
-            'article': article
+            'article': article,
+            'user': user
         }
     )
 
@@ -327,11 +335,10 @@ def dislike_article(request: Request, article_id: int, user: models.User=Depends
     # Otherwise, return a dictionary with the status and dislikes of the article
     return {"status": "success", "dislikes": article.dislikes}
 
-    
+
 
 @router.post("/add_comment/{article_id}")
 def add_comment(
-    request: Request,
     article_id: int,  
     comment: str = Form(...),  
     user: models.User=Depends(login_manager), 
@@ -349,29 +356,21 @@ def add_comment(
     Returns:
         dict: A dictionary with the status and the ID of the newly created comment.
     """
-    # Create a new comment object
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You have to be connected")
+        
     new_comment = models.Comment(
-        body=comment,  # The content of the comment
-        article_id=article_id,  # The ID of the article to add the comment to
-        author_id=user.id,  # The ID of the authenticated user
-        likes=0,  # The number of likes for the comment
-        dislikes=0  # The number of dislikes for the comment
+        body=comment,
+        article_id=article_id,
+        author_id=user.id,
+        likes=0,
+        dislikes=0
     )
-    
-
-    article = db.query(models.Article).get(article_id)
-    # Add the comment to the database
     db.add(new_comment)
     db.commit()
     db.refresh(new_comment)
     
-    # Return a dictionary with the status and the ID of the newly created comment
-    return templates.TemplateResponse(
-        "read_article.html",  # Template file path.
-        context={
-            'request': request,  # Template context data
-            'article': article  # The article object 
-            })
+    return {"status": "success", "comment_id": new_comment.id}
 
 @router.get("/comments/like/{article_id}/{comment_id}")
 def like_article(request: Request, article_id: int, comment_id: int, user: models.User=Depends(login_manager), db: Session = Depends(get_db)):
