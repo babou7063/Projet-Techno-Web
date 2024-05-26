@@ -331,6 +331,7 @@ def dislike_article(request: Request, article_id: int, user: models.User=Depends
 
 @router.post("/add_comment/{article_id}")
 def add_comment(
+    request: Request,
     article_id: int,  
     comment: str = Form(...),  
     user: models.User=Depends(login_manager), 
@@ -348,13 +349,6 @@ def add_comment(
     Returns:
         dict: A dictionary with the status and the ID of the newly created comment.
     """
-    # Check if the user is authenticated
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="You have to be connected"
-        )
-    
     # Create a new comment object
     new_comment = models.Comment(
         body=comment,  # The content of the comment
@@ -364,13 +358,20 @@ def add_comment(
         dislikes=0  # The number of dislikes for the comment
     )
     
+
+    article = db.query(models.Article).get(article_id)
     # Add the comment to the database
     db.add(new_comment)
     db.commit()
     db.refresh(new_comment)
     
     # Return a dictionary with the status and the ID of the newly created comment
-    return {"status": "success", "comment_id": new_comment.id}
+    return templates.TemplateResponse(
+        "read_article.html",  # Template file path.
+        context={
+            'request': request,  # Template context data
+            'article': article  # The article object 
+            })
 
 @router.get("/comments/like/{article_id}/{comment_id}")
 def like_article(request: Request, article_id: int, comment_id: int, user: models.User=Depends(login_manager), db: Session = Depends(get_db)):

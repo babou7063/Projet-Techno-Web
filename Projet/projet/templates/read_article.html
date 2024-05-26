@@ -21,7 +21,7 @@
 <div class="container my-5">
     <div class="card shadow-sm p-3">
         <h3 class="mt-2">Comment section</h3>
-        <form id="post-form">
+        <form action="/articles/add_comment/{{ article.id }}" method="post">
             <input type="text" name="comment" id="comment" placeholder="Add your comment" class="form-control mb-2">
             <button type="submit" class="btn btn-primary mb-4">Post</button>
         </form>
@@ -48,26 +48,4 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    var form = document.getElementById('post-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        var formData = new FormData(form);
-        console.log(formData)
-        fetch(`/articles/add_comment/{{ article.id }}`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            window.location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-</script>
-
 {% endblock %}
