@@ -11,12 +11,27 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 class Subscription(Base):
+    """
+    A class representing a subscription.
+
+    Attributes
+    ----------
+    user_id : str
+        The ID of the user who subscribed.
+    author_id : str
+        The ID of the user who the user subscribed to.
+    user : User
+        The user who subscribed.
+    author : User
+        The user who the user subscribed to.
+    """
     __tablename__ = 'subscriptions'
    
     user_id = Column(String(72), ForeignKey('users.id'), primary_key=True)
     author_id = Column(String(72), ForeignKey('users.id'), primary_key=True)
     user = relationship("User", foreign_keys=[user_id], back_populates="subscriptions")
     author = relationship("User", foreign_keys=[author_id], back_populates="subscribers")
+
 
 
 
@@ -70,6 +85,33 @@ class User(Base):
  
 
 class Article(Base):
+    """
+    A class representing an article.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the article.
+    body : str
+        The content of the article.
+    title : str
+        The title of the article.
+    created_at : datetime
+        The date and time when the article was created.
+    author_id : str
+        The ID of the user who created the article.
+    likes : int
+        The number of likes for the article.
+    dislikes : int
+        The number of dislikes for the article.
+    author : User
+        The user who created the article.
+    comments : list of Comment
+        A list of comments associated with the article.
+    likes_dislikes_article : list of LikeDislikeArticle
+        A list of interactions associated with the article.
+    """
+
     __tablename__ = "articles"
 
     id = Column(Integer, primary_key=True)
@@ -85,7 +127,22 @@ class Article(Base):
     likes_dislikes_article = relationship("LikeDislikeArticle", back_populates="article")
 
 class Token(Base):
-    "used for reset the password of a user"
+    """
+    Used for resetting the password of a user.
+
+    Attributes
+    ----------
+    token : str
+        The token string.
+    user_email : str
+        The email of the user.
+    user : User
+        The user associated with the token.
+    created_at : datetime
+        The date and time when the token was created.
+    expires_in : int
+        The duration of the token in seconds.
+    """
     __tablename__ = 'tokens'
     token = Column(String(72), primary_key=True)
     user_email = Column(String(72), ForeignKey('users.email'))
@@ -94,8 +151,16 @@ class Token(Base):
     expires_in = Column(Integer, default=3600)  # Durée en secondes
 
     def is_expired(self):
+        """
+        Check if the token has expired.
+
+        Returns
+        -------
+        bool
+            True if the token has expired, False otherwise.
+        """
         return datetime.utcnow() > self.created_at + timedelta(seconds=self.expires_in)
-    
+       
     
 class Comment(Base):
     """
@@ -133,6 +198,28 @@ class Comment(Base):
     
     
 class LikeDislikeArticle(Base):
+    """
+    A class representing an interaction (like/dislike) for an article.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the interaction.
+    user_id : str
+        The ID of the user who interacted with the article.
+    article_id : int
+        The ID of the article.
+    is_like : bool
+        If True, the user liked the article; if False, the user disliked the article.
+
+    Relationships
+    --------------
+    user : User
+        The user who interacted with the article.
+    article : Article
+        The article.
+    """
+
     __tablename__ = "likes_dislikes_article"
 
     id = Column(Integer, primary_key=True)
@@ -145,6 +232,28 @@ class LikeDislikeArticle(Base):
     
 
 class LikeDislikeComments(Base):
+    """
+    A class representing an interaction (like/dislike) for a comment.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the interaction.
+    user_id : str
+        The ID of the user who interacted with the comment.
+    comment_id : int
+        The ID of the comment.
+    is_like : bool
+        If True, the user liked the comment; if False, the user disliked the comment.
+
+    Relationships
+    --------------
+    user : User
+        The user who interacted with the comment.
+    comment : Comment
+        The comment.
+    """
+
     __tablename__ = "likes_dislikes_comments"
 
     id = Column(Integer, primary_key=True)
@@ -154,3 +263,4 @@ class LikeDislikeComments(Base):
 
     user = relationship("User", back_populates="likes_dislikes_comment")
     comment = relationship("Comment", back_populates="likes_dislikes_comments")
+

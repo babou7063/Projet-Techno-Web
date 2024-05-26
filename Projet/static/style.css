@@ -20,15 +20,6 @@ body {
     width: 400px;
 }
 
-h2{
-    color: #4caf50; /* Green color for the titles */
-    text-align: center;
-}
-
-.h4{
-    color: #4caf50; /* Green color for the titles */
-    text-align: center;
-}
 
 .input-group {
     margin-bottom: 20px;
@@ -82,4 +73,3 @@ h2{
 #home{
     margin-top: -30px;
 }
-
